@@ -71,16 +71,25 @@ public class WorkbookGenerator {
     }
 
     private String randomValueFor(ColumnSpec column, Random random) {
-        return switch (column) {
-            case ColumnSpec.TextColumn c ->
-                    sampleWord(c.words(), random) + " " + sampleWord(c.words(), random);
-            case ColumnSpec.IntegerColumn c -> String.valueOf(random.nextLong(c.min(), c.max() + 1));
-            case ColumnSpec.DecimalColumn c -> String.format("%.2f", random.nextDouble(c.min(), c.max()));
-            case ColumnSpec.DateColumn c -> randomDateBetween(c.start(), c.end(), random).toString();
-            case ColumnSpec.ChoiceColumn c -> c.options().get(random.nextInt(c.options().size()));
-            case ColumnSpec.NullableColumn c ->
-                    random.nextDouble() < c.blankProbability() ? "" : randomValueFor(c.column(), random);
-        };
+        if (column instanceof ColumnSpec.TextColumn c) {
+            return sampleWord(c.words(), random) + " " + sampleWord(c.words(), random);
+        }
+        if (column instanceof ColumnSpec.IntegerColumn c) {
+            return String.valueOf(random.nextLong(c.min(), c.max() + 1));
+        }
+        if (column instanceof ColumnSpec.DecimalColumn c) {
+            return String.format("%.2f", random.nextDouble(c.min(), c.max()));
+        }
+        if (column instanceof ColumnSpec.DateColumn c) {
+            return randomDateBetween(c.start(), c.end(), random).toString();
+        }
+        if (column instanceof ColumnSpec.ChoiceColumn c) {
+            return c.options().get(random.nextInt(c.options().size()));
+        }
+        if (column instanceof ColumnSpec.NullableColumn c) {
+            return random.nextDouble() < c.blankProbability() ? "" : randomValueFor(c.column(), random);
+        }
+        throw new IllegalStateException("Unknown column type: " + column.getClass());
     }
 
     private LocalDate randomDateBetween(LocalDate start, LocalDate end, Random random) {
