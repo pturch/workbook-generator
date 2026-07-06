@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "workbook-tools": {
+      "type": "stdio",
+      "command": "mvn",
+      "args": ["-q", "compile", "exec:java"],
+      "env": {}
+    }
+  }
+}
