@@ -94,7 +94,8 @@ public class WorkbookTools {
         
         return SyncToolSpecification.builder()
             .tool(Tool.builder("generate_workbook", McpJsonDefaults.getMapper(), schema)
-                .description("Generates a sample .xlsx workbook from column specifications and writes it to the output directory")
+                .description("Generates a sample .xlsx workbook from column specifications and writes it to the output directory. "
+                    + "See resource workbook-tools://schema/column-spec for the annotated column spec schema.")
                 .outputSchema(McpJsonDefaults.getMapper(), outputSchema)
                 .build())
             .callHandler((exchange, request) -> {
