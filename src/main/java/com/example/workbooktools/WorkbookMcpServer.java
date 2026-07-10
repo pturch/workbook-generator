@@ -11,7 +11,11 @@ public class WorkbookMcpServer {
             new StdioServerTransportProvider(McpJsonDefaults.getMapper());
 
             var server = McpServer.sync(transportProvider)
-            .capabilities(ServerCapabilities.builder().tools(true).resources(false, false).build())
+            .capabilities(ServerCapabilities.builder()
+                .tools(true)
+                .resources(false, false)
+                .prompts(false)
+                .build())
             .serverInfo("workbook-tools", "0.0.1")
             .build();
 
@@ -24,5 +28,9 @@ public class WorkbookMcpServer {
             server.addResource(WorkbookResources.columnSpecSchemaResource());
             server.addResourceTemplate(WorkbookResources.workbookFileInfoResource());
             server.addResource(WorkbookResources.columnTypesGuideResource());
+
+            server.addPrompt(WorkbookPrompts.designWorkbookPrompt());
+            server.addPrompt(WorkbookPrompts.reviewWorkbookPrompt());
+
     }
 }
